@@ -119,14 +119,43 @@ IBM Telco Customer Churn dataset from [Kaggle](https://www.kaggle.com/datasets/b
 
 ---
 
-## 👤 Developer
+## 📝 Conclusions
 
-**Sathwik S.Y.R** — Big Data Engineering Student
+### Key Findings from the Data
 
-Skills: `Python` `Machine Learning` `Power BI` `SQL` `Streamlit` `Apache Spark`
+- **Contract type is the strongest churn predictor** — customers on month-to-month contracts churn at a much higher rate (~42%) compared to one-year (~11%) or two-year (~3%) contracts. Encouraging long-term contracts is the single most effective retention strategy.
+
+- **Tenure matters significantly** — customers who have been with the company for less than 12 months are at the highest risk of churning. The longer a customer stays, the less likely they are to leave.
+
+- **Fiber optic users churn more** — despite being a premium service, fiber optic internet customers show higher churn rates, suggesting pricing or service quality issues that need to be addressed.
+
+- **Electronic check payment increases churn risk** — customers paying via electronic check churn more than those using automatic bank transfers or credit cards, possibly indicating less commitment or financial instability.
+
+- **Lack of support services drives churn** — customers without tech support, online security, or online backup are significantly more likely to churn. Bundling these services can improve retention.
+
+- **Senior citizens are at higher risk** — senior citizen customers show elevated churn rates and may need dedicated support programs or pricing plans.
+
+### Business Recommendations
+
+| Action | Impact |
+|--------|--------|
+| Offer discounts for 1-year or 2-year contracts | High |
+| Target new customers (< 12 months) with loyalty rewards | High |
+| Improve fiber optic service quality or reprice | Medium |
+| Bundle tech support & security into base plans | Medium |
+| Switch customers from electronic check to auto-pay | Low |
+
+### Model Performance
+
+- The Random Forest model successfully identifies high-risk customers with good accuracy on the IBM Telco dataset.
+- Real-time predictions allow customer service teams to intervene proactively before a customer churns.
+- This dashboard can save businesses significant revenue by reducing churn through targeted retention campaigns.
 
 ---
 
-## 📄 License
+## 👤 Developer
 
-This project is licensed under the MIT License.
+**Sanka Yuga Raghu Sathwik ** — Big Data Engineering Student
+
+Skills: `Python` `Machine Learning` `Power BI` `SQL` `Streamlit` `Apache Spark`
+
