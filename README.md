@@ -155,7 +155,7 @@ IBM Telco Customer Churn dataset from [Kaggle](https://www.kaggle.com/datasets/b
 
 ## 👤 Developer
 
-**Sanka Yuga Raghu Sathwik ** — Big Data Engineering Student
+Sanka Yuga Raghu Sathwik — Big Data Engineering Student
 
 Skills: `Python` `Machine Learning` `Power BI` `SQL` `Streamlit` `Apache Spark`
 
