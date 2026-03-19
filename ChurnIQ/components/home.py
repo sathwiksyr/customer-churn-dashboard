@@ -13,7 +13,7 @@ def show_home(total, rate, retained, avg_ten):
     k1.metric("Total customers", f"{total:,}")
     k2.metric("Churn rate",      f"{rate:.1f}%", delta="-2.1% vs last qtr", delta_color="normal")
     k3.metric("Retained",        f"{retained:,}", delta="+1.4%",             delta_color="normal")
-    k4.metric("Avg tenure",      f"{avg_ten:.0f} mo")
+    k4.metric("Avg tenure", f"{avg_ten:.0f} months")
  
     st.markdown("<div style='margin-top:1.5rem;'></div>", unsafe_allow_html=True)
  
