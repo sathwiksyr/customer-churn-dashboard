@@ -1,9 +1,8 @@
-# app.py  —  entry point
 import os
 import streamlit as st
  
 from loader import load_model, load_data
-from components.login     import show_login
+from components.auth      import show_auth, is_logged_in, current_user, logout
 from components.home      import show_home
 from components.predict   import show_predict
 from components.analytics import show_analytics
@@ -16,18 +15,15 @@ st.set_page_config(
     layout="wide",
 )
  
-# ── Inject CSS (absolute path fix) ───────────
+# ── Inject CSS ───────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 css_path = os.path.join(BASE_DIR, "assets", "style.css")
 with open(css_path) as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
  
 # ── Auth gate ────────────────────────────────
-if "login" not in st.session_state:
-    st.session_state["login"] = False
- 
-if not st.session_state["login"]:
-    show_login()
+if not is_logged_in():
+    show_auth()
     st.stop()
  
 # ── Load data & model ────────────────────────
@@ -41,19 +37,28 @@ rate     = churned / total * 100
 avg_ten  = df["tenure"].mean()
  
 # ── Top nav bar ──────────────────────────────
-st.markdown("""
+st.markdown(f"""
 <div class="topbar">
     <div class="topbar-logo">
         <span class="logo-dot"></span> ChurnIQ
     </div>
-    <span style="font-size:13px; color:#aaa;">Customer Churn Intelligence</span>
+    <div style="display:flex; align-items:center; gap:16px;">
+        <span style="font-size:13px; color:#aaa;">👤 {current_user()}</span>
+    </div>
 </div>
 """, unsafe_allow_html=True)
  
-menu = st.radio(
-    "", ["🏠  Home", "🔍  Predict", "📊  Analytics", "👤  About"],
-    horizontal=True, label_visibility="collapsed",
-)
+# ── Nav menu + logout ─────────────────────────
+col_menu, col_logout = st.columns([5, 1])
+with col_menu:
+    menu = st.radio(
+        "", ["🏠  Home", "🔍  Predict", "📊  Analytics", "👤  About"],
+        horizontal=True, label_visibility="collapsed",
+    )
+with col_logout:
+    if st.button("Sign out", use_container_width=True):
+        logout()
+ 
 st.markdown("<div style='margin-top:1.2rem;'></div>", unsafe_allow_html=True)
  
 # ── Route to page ────────────────────────────
