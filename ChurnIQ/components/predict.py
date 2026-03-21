@@ -3,7 +3,8 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 from Config import RED, GREEN
-from utils  import show_shap_chart, show_recommendations
+# CORRECT
+from utils import show_shap_chart, show_recommendations
  
  
 def show_predict(model, encoders):

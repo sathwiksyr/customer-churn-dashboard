@@ -4,7 +4,7 @@ import plotly.express as px
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from Config import RED, BLUE, clean_fig
-from utils  import show_model_comparison, load_metrics, load_best_name, create_pdf_report
+from utils import show_model_comparison, load_metrics, load_best_name, create_pdf_report
  
  
 def show_analytics(df, total, churned, retained, rate):
