@@ -4,3 +4,6 @@ plotly
 scikit-learn
 reportlab
 numpy
+shap
+xgboost
+matplotlib

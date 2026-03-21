@@ -1,18 +1,22 @@
-# components/predict.py
 import time
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from Config import RED, GREEN
+from config import RED, GREEN
+from utils  import show_shap_chart, show_recommendations
  
  
 def show_predict(model, encoders):
     st.markdown("""
     <div class="page-hero">
-        <h1>Predict churn risk</h1>
-        <p>Enter customer attributes to get a real-time probability estimate</p>
+        <h1>🔍 Predict Churn Risk</h1>
+        <p>Enter customer attributes — get prediction, explanation &amp; recommendations</p>
     </div>
     """, unsafe_allow_html=True)
+ 
+    # ── Input form ────────────────────────────
+    st.markdown('<div class="section-card">', unsafe_allow_html=True)
+    st.markdown("<h2 style='font-size:15px; font-weight:600; color:#111; margin-bottom:14px;'>Customer details</h2>", unsafe_allow_html=True)
  
     col1, col2 = st.columns(2)
     with col1:
@@ -30,11 +34,7 @@ def show_predict(model, encoders):
         total_charges   = st.number_input("Total charges ($)", 0.0, 10000.0, float(tenure * 65), step=10.0)
         _               = st.slider("Number of dependents", 0, 5, 0)
  
-    st.markdown(
-        "<div style='margin-top:0.5rem; font-size:13px; font-weight:600; color:#555;'>"
-        "Add-ons & account flags</div>",
-        unsafe_allow_html=True
-    )
+    st.markdown("<div style='margin-top:0.5rem; font-size:13px; font-weight:600; color:#555;'>Add-ons & flags</div>", unsafe_allow_html=True)
     st.markdown("<div style='margin-bottom:0.4rem;'></div>", unsafe_allow_html=True)
  
     c1, c2, c3, c4 = st.columns(4)
@@ -52,20 +52,17 @@ def show_predict(model, encoders):
         tech_support    = st.checkbox("Tech support")
  
     c5, c6, c7, c8 = st.columns(4)
-    with c5:
-        device_protection = st.checkbox("Device protection")
-    with c6:
-        streaming_tv      = st.checkbox("Streaming TV")
-    with c7:
-        streaming_movies  = st.checkbox("Streaming movies")
-    with c8:
-        paperless_billing = st.checkbox("Paperless billing")
+    with c5:  device_protection = st.checkbox("Device protection")
+    with c6:  streaming_tv      = st.checkbox("Streaming TV")
+    with c7:  streaming_movies  = st.checkbox("Streaming movies")
+    with c8:  paperless_billing = st.checkbox("Paperless billing")
  
+    st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("<div style='margin-top:0.8rem;'></div>", unsafe_allow_html=True)
  
-    if st.button("▶  Run prediction"):
+    if st.button("▶  Run prediction", key="run_pred"):
         with st.spinner("Analyzing customer profile..."):
-            time.sleep(1.2)
+            time.sleep(1.0)
  
             contract_enc = encoders["Contract"].transform([contract])[0]
             internet_enc = encoders["InternetService"].transform([internet])[0]
@@ -94,12 +91,14 @@ def show_predict(model, encoders):
             prob   = model.predict_proba(input_df)[0][1]
             result = model.predict(input_df)[0]
  
+        # ── Result metrics ────────────────────
         st.markdown("<div style='margin-top:1rem;'></div>", unsafe_allow_html=True)
         p1, p2, p3 = st.columns(3)
         p1.metric("Churn probability", f"{prob*100:.1f}%")
         p2.metric("Risk level",        "High risk ⚠️" if result == 1 else "Low risk ✅")
         p3.metric("Confidence",        f"{max(prob, 1-prob)*100:.1f}%")
  
+        # ── Gauge ─────────────────────────────
         color = RED if prob > 0.5 else GREEN
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -114,43 +113,34 @@ def show_predict(model, encoders):
                     {"range": [40, 65],  "color": "#FFF8E7"},
                     {"range": [65, 100], "color": "#FCEBEB"},
                 ],
-                "threshold": {
-                    "line": {"color": color, "width": 3},
-                    "thickness": 0.75,
-                    "value": round(prob * 100, 1),
-                },
+                "threshold": {"line": {"color": color, "width": 3},
+                              "thickness": 0.75, "value": round(prob * 100, 1)},
             },
         ))
-        fig.update_layout(height=260, margin=dict(l=20, r=20, t=20, b=0), paper_bgcolor="rgba(0,0,0,0)")
+        fig.update_layout(height=260, margin=dict(l=20, r=20, t=20, b=0),
+                          paper_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig, use_container_width=True)
  
-        badge = (
-            '<span class="badge-high">⚠️ High churn risk</span>'
-            if result == 1 else
-            '<span class="badge-low">✅ Low churn risk</span>'
-        )
-        st.markdown(f"<div style='text-align:center; margin-top:-10px;'>{badge}</div>", unsafe_allow_html=True)
+        badge = ('<span class="badge-high">⚠️ High churn risk</span>'
+                 if result == 1 else '<span class="badge-low">✅ Low churn risk</span>')
+        st.markdown(f"<div style='text-align:center; margin-top:-10px; margin-bottom:1.5rem;'>{badge}</div>",
+                    unsafe_allow_html=True)
  
-        st.markdown("<div style='margin-top:1.2rem;'></div>", unsafe_allow_html=True)
-        st.markdown('<div class="section-card"><h2>🔎 Key factors driving this prediction</h2>', unsafe_allow_html=True)
-        factors = []
-        if contract == "Month-to-month":  factors.append(("▲ Month-to-month contract", RED))
-        if tenure < 12:                   factors.append(("▲ Short tenure (< 12 months)", RED))
-        if monthly_charges > 80:          factors.append(("▲ High monthly charges", RED))
-        if internet == "Fiber optic":     factors.append(("▲ Fiber optic service", RED))
-        if not tech_support:              factors.append(("▲ No tech support", "#E59400"))
-        if not online_security:           factors.append(("▲ No online security", "#E59400"))
-        if senior_citizen:                factors.append(("▲ Senior citizen", "#E59400"))
-        if contract == "Two year":        factors.append(("▼ Two-year contract", GREEN))
-        if tenure > 36:                   factors.append(("▼ Long-term customer", GREEN))
-        if tech_support:                  factors.append(("▼ Has tech support", GREEN))
-        if partner:                       factors.append(("▼ Has partner", GREEN))
-        for label, color_f in factors[:6]:
-            st.markdown(
-                f"<div class='feat-item'>"
-                f"<span style='color:{color_f}; font-weight:600;'>{label[:1]}</span>"
-                f"<span>{label[2:]}</span></div>",
-                unsafe_allow_html=True,
+        # ── Tabs: SHAP | Recommendations ──────
+        tab1, tab2 = st.tabs(["🧠 Explainable AI (SHAP)", "💡 Recommendations"])
+ 
+        with tab1:
+            st.markdown('<div class="section-card"><h2>Why is this customer predicted to churn?</h2>', unsafe_allow_html=True)
+            st.markdown("<p style='font-size:13px; color:#888; margin-bottom:12px;'>SHAP values show how much each feature contributed to this prediction. Red = increases churn risk, Green = reduces it.</p>", unsafe_allow_html=True)
+            show_shap_chart(model, input_df)
+            st.markdown("</div>", unsafe_allow_html=True)
+ 
+        with tab2:
+            st.markdown('<div class="section-card"><h2>💡 Actionable Business Recommendations</h2>', unsafe_allow_html=True)
+            st.markdown("<p style='font-size:13px; color:#888; margin-bottom:12px;'>Based on this customer's profile, here are targeted retention strategies:</p>", unsafe_allow_html=True)
+            show_recommendations(
+                prob, contract, internet, tech_support,
+                online_security, tenure, monthly_charges,
+                senior_citizen, payment_method
             )
-        st.markdown("</div>", unsafe_allow_html=True)
- 
+            st.markdown("</div>", unsafe_allow_html=True)
