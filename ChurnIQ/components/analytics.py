@@ -3,7 +3,7 @@ import streamlit as st
 import plotly.express as px
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
-from config import RED, BLUE, clean_fig
+from Config import RED, BLUE, clean_fig
 from utils  import show_model_comparison, load_metrics, load_best_name, create_pdf_report
  
  

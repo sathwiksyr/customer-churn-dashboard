@@ -2,7 +2,7 @@ import time
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from config import RED, GREEN
+from Config import RED, GREEN
 from utils  import show_shap_chart, show_recommendations
  
  
