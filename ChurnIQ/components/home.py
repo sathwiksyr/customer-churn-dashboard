@@ -105,4 +105,3 @@ def show_home(total, rate, retained, avg_ten):
         </div>
     </div>
     """, unsafe_allow_html=True)
- 
