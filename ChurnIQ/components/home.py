@@ -1,5 +1,4 @@
 # components/home.py
-import time
 import streamlit as st
  
  
@@ -20,24 +19,6 @@ def show_home(total, rate, retained, avg_ten):
     k4.metric("Avg tenure",      f"{avg_ten:.0f} months")
  
     st.markdown("<div style='margin-top:1.5rem;'></div>", unsafe_allow_html=True)
- 
-    # ── Upload new CSV ────────────────────────
-    with st.expander("📂 Upload new customer data (CSV)", expanded=False):
-        st.markdown("<p style='font-size:13px; color:#666;'>Upload an updated CSV to refresh the dashboard instantly.</p>", unsafe_allow_html=True)
-        uploaded = st.file_uploader("Choose CSV file", type=["csv"], label_visibility="collapsed")
-        if uploaded:
-            import pandas as pd
-            import os
-            BASE_DIR  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            save_path = os.path.join(BASE_DIR, "data", "Churn.csv")
-            df_new    = pd.read_csv(uploaded)
-            df_new.to_csv(save_path, index=False)
-            st.success(f"✅ Data updated! {len(df_new):,} records loaded.")
-            st.cache_data.clear()
-            time.sleep(1)
-            st.rerun()
- 
-    st.markdown("<div style='margin-top:0.5rem;'></div>", unsafe_allow_html=True)
  
     # ── Feature cards ─────────────────────────
     c1, c2 = st.columns(2)
