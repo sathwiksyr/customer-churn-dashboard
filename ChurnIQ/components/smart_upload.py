@@ -65,16 +65,23 @@ def _clean(fig, h=260):
  
 def show_smart_upload():
     # ── Header ────────────────────────────────
-    st.markdown("""
-    <div class="page-hero">
-        <h1>🔭 DataLens
-            <span style="font-size:14px; font-weight:400; color:#378ADD;">
-                — Universal Analytics Studio
-            </span>
-        </h1>
-        <p>Upload any CSV dataset — auto-detect columns &amp; build a full analytics dashboard instantly</p>
-    </div>
-    """, unsafe_allow_html=True)
+    col_title, col_refresh = st.columns([5, 1])
+    with col_title:
+        st.markdown("""
+        <div class="page-hero">
+            <h1>🔭 DataLens
+                <span style="font-size:14px; font-weight:400; color:#378ADD;">
+                    — Universal Analytics Studio
+                </span>
+            </h1>
+            <p>Upload any CSV dataset — auto-detect columns &amp; build a full analytics dashboard instantly</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_refresh:
+        st.markdown("<div style='margin-top:1.2rem;'></div>", unsafe_allow_html=True)
+        if st.button("🔄 Refresh", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
  
     uploaded = st.file_uploader(
         "Drop any CSV file here", type=["csv"],

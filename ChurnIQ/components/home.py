@@ -1,33 +1,22 @@
 # components/home.py
 import time
 import streamlit as st
-from datetime import datetime
  
  
 def show_home(total, rate, retained, avg_ten):
-    now = datetime.now().strftime("%d %b %Y · %H:%M:%S")
  
-    col_title, col_refresh = st.columns([4, 1])
-    with col_title:
-        st.markdown(f"""
-        <div class="page-hero">
-            <h1>📊 ChurnIQ <span style="font-size:14px; font-weight:400; color:#1D9E75;">— Churn Intelligence</span></h1>
-            <p>IBM Telco dataset · ML-powered predictions
-            &nbsp;·&nbsp; <span style="color:#1D9E75; font-weight:500;">● Live</span>
-            &nbsp;·&nbsp; Last updated: {now}</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with col_refresh:
-        st.markdown("<div style='margin-top:1.2rem;'></div>", unsafe_allow_html=True)
-        if st.button("🔄 Refresh", use_container_width=True):
-            st.cache_data.clear()
-            st.rerun()
+    st.markdown("""
+    <div class="page-hero">
+        <h1>📊 ChurnIQ <span style="font-size:14px; font-weight:400; color:#1D9E75;">— Churn Intelligence</span></h1>
+        <p>IBM Telco dataset · ML-powered predictions · <span style="color:#1D9E75; font-weight:500;">● Live</span></p>
+    </div>
+    """, unsafe_allow_html=True)
  
     # ── KPI metrics ───────────────────────────
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Total customers", f"{total:,}")
-    k2.metric("Churn rate",      f"{rate:.1f}%",      delta="-2.1% vs last qtr", delta_color="normal")
-    k3.metric("Retained",        f"{retained:,}",     delta="+1.4%",             delta_color="normal")
+    k2.metric("Churn rate",      f"{rate:.1f}%",  delta="-2.1% vs last qtr", delta_color="normal")
+    k3.metric("Retained",        f"{retained:,}", delta="+1.4%",             delta_color="normal")
     k4.metric("Avg tenure",      f"{avg_ten:.0f} months")
  
     st.markdown("<div style='margin-top:1.5rem;'></div>", unsafe_allow_html=True)
@@ -50,7 +39,7 @@ def show_home(total, rate, retained, avg_ten):
  
     st.markdown("<div style='margin-top:0.5rem;'></div>", unsafe_allow_html=True)
  
-    # ── Two feature cards ─────────────────────
+    # ── Feature cards ─────────────────────────
     c1, c2 = st.columns(2)
  
     with c1:
@@ -58,7 +47,7 @@ def show_home(total, rate, retained, avg_ten):
         <div class="section-card">
             <h2>🚀 What ChurnIQ does</h2>
             <div class="feat-item"><span class="feat-dot"></span>
-                <strong>ML Prediction</strong> — Random Forest model predicts churn probability in real-time
+                <strong>ML Prediction</strong> — Random Forest predicts churn probability in real-time
             </div>
             <div class="feat-item"><span class="feat-dot"></span>
                 <strong>Explainable AI (SHAP)</strong> — Shows exactly why a customer is predicted to churn
@@ -103,20 +92,17 @@ def show_home(total, rate, retained, avg_ten):
         </div>
         """, unsafe_allow_html=True)
  
-    # ── InsightIQ promo ───────────────────────
+    # ── DataLens promo ────────────────────────
     st.markdown("""
-    <div class="section-card" style="margin-top:0.5rem; border-left: 3px solid #378ADD;">
-        <h2>🔍 Also available — InsightIQ <span style="font-size:12px; font-weight:400; color:#378ADD;">Insight Intelligence</span></h2>
+    <div class="section-card" style="margin-top:0.5rem; border-left:3px solid #378ADD;">
+        <h2>🔭 Also available — DataLens
+            <span style="font-size:12px; font-weight:400; color:#378ADD;">Universal Analytics Studio</span>
+        </h2>
         <div style="font-size:13px; color:#666; line-height:1.7;">
-            Upload <strong>any CSV dataset</strong> (HR attrition, sales, finance) and InsightIQ will
-            auto-detect columns, map them smartly, and build a complete analytics dashboard instantly —
-            no setup needed. Go back to the home screen to access InsightIQ.
+            Upload <strong>any CSV dataset</strong> (HR attrition, sales, finance) and DataLens will
+            auto-detect columns, map them smartly, and build a complete analytics dashboard instantly.
+            Go back using <strong>← Switch tool</strong> to access DataLens.
         </div>
     </div>
     """, unsafe_allow_html=True)
  
-    st.markdown(
-        "<p style='font-size:11px; color:#bbb; text-align:center; margin-top:1rem;'>"
-        "ChurnIQ — Churn Intelligence · Auto-refreshes every 30 seconds</p>",
-        unsafe_allow_html=True
-    )
