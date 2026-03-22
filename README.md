@@ -5,7 +5,6 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange?style=flat&logo=scikit-learn)
 ![SHAP](https://img.shields.io/badge/SHAP-Explainable_AI-purple?style=flat)
 ![XGBoost](https://img.shields.io/badge/XGBoost-Gradient_Boost-green?style=flat)
-![License](https://img.shields.io/badge/License-MIT-green?style=flat)
  
 > A full end-to-end Intelligence Platform combining **ChurnIQ** (Customer Churn Prediction with Explainable AI) and **DataLens** (Universal Analytics Studio for any CSV dataset).
  
@@ -192,6 +191,3 @@ IBM Telco Customer Churn dataset from [Kaggle](https://www.kaggle.com/datasets/b
  
 ---
  
-## 📄 License
- 
-This project is licensed under the MIT License.
